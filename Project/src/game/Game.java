@@ -12,11 +12,12 @@ public class Game {
 
     private void setPC() {
         System.out.println("""
-                Корабли вводить в формате xyz,\s
-                где x: {a..z}, y: {1..10}, z: v(вертикальный) или h(горизонтальный)\s
-                пример для корабля 2 ранга: d1v- вертикальный корабль: [d1, e1]\s
-                Координаты вводить в формате xy,
-                где x: {a..z}, y: {1..10}
+                -Корабли вводить в формате xyz, где x: {a..z}, y: {1..10}, z: v(вертикальный) или h(горизонтальный)
+                 Пример для корабля 2 ранга: d1v- вертикальный корабль: [d1, e1].
+                -Координаты атаки вводить в формате xy, где x: {a..z}, y: {1..10}.
+                -Под полем каждого игрока список кораблей по рангам.
+                -После ввода уровня игрока (в данный момент все уровни играют одинаково)
+                 выводится список кораблей игрока для проверки
                 """);
         String name;
         Scanner sc = new Scanner(System.in);
@@ -35,7 +36,6 @@ public class Game {
                 pc.autoSetListOfShips();
         }
     }
-
     private void setNpc() {
         int rank;
         Scanner sc = new Scanner(System.in);
@@ -59,7 +59,7 @@ public class Game {
         Output.refreshConsole(this);
     }
 
-    public void round() {
+    private void round() {
         boolean shot = true;
         while (shot) {
             String str = pc.shot();
@@ -81,7 +81,6 @@ public class Game {
             Output.refreshConsole(this);
         }
     }
-
     public String game() {
         while (pc.isAlive() && npc.isAlive())
             round();

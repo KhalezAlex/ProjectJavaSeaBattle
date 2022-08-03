@@ -93,6 +93,7 @@ public class PC extends Player implements game.IGame {
             }
         }
     }
+
     @Override
     public void autoSetListOfShips() {
         int freeCells = field.getFreeCellsForShip();

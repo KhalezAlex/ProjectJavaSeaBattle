@@ -47,6 +47,7 @@ public class NPC extends Player implements IGame {
     public void setDots(Ship ship) {
         this.field.setLabels(ship, ".");
     }
+
     private void setVerticalShip(Ship ship) {
         if (Validations.isShipValid(ship, this.field)) {
             for (int i = 0; i < ship.getRank(); i++) {
@@ -83,7 +84,6 @@ public class NPC extends Player implements IGame {
             System.out.println(Arrays.toString(ship.getShipCords().toArray()));
         }
     }
-
     @Override
     public void autoSetListOfShips() {
         int freeCells = field.getFreeCellsForShip();
