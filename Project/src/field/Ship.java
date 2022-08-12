@@ -7,7 +7,6 @@ public class Ship {
     private final int[] nose;
     private final boolean isVertical;
     private final ArrayList<String> shipCords = new ArrayList<>();
-    private final boolean isDead;
 
     public ArrayList<String> getShipCords() {
         return shipCords;
@@ -27,7 +26,6 @@ public class Ship {
         isVertical = str.charAt(str.length() - 1) == 'v';
         str = str.substring(0, str.length() - 1);
         this.nose = new int[] {(int) str.charAt(0) - 97, Integer.parseInt(str.substring(1)) - 1};
-        this.isDead = false;
         if (isVertical){
             for (int i = 0; i < rank; i++) {
                 shipCords.add(str.replace(str.charAt(0), (char) ((int) str.charAt(0) + i)));

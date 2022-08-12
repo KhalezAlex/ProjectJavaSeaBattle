@@ -3,7 +3,6 @@ package util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import field.Ship;
 import field.Field;
 
@@ -84,7 +83,6 @@ public class Validations {
             return false;
         }
         str = str.substring(1);
-//        System.out.println(str);
         for (int i = 0; i < str.length(); i++)
             if (!Character.isDigit(str.charAt(i))) {
                 return false;

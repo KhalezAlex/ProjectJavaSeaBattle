@@ -149,5 +149,4 @@ public class PC extends Player implements game.IGame {
         listOfShips.removeIf(ship -> ship.getShipCords().isEmpty());
         return shot.get();
     }
-
 }
