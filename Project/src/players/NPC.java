@@ -1,14 +1,16 @@
 package players;
+
 import field.Field;
 import field.Ship;
 import game.IGame;
 import util.Validations;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NPC extends Player implements IGame {
-    int rank;
+    double rank;
 
     public NPC(int rank) {
         if (rank == 0) this.name = "rookie";
@@ -20,7 +22,7 @@ public class NPC extends Player implements IGame {
         this.hasDamagedShip = false;
         this.listOfShips = new ArrayList<>();
         this.isAlive = true;
-        this.rank = rank;
+        this.rank = 0.2 + rank * 0.15;
     }
 
     private String genStrFromNoseCords(int i, int j) {
@@ -32,6 +34,7 @@ public class NPC extends Player implements IGame {
         else str = str.concat("h");
         return str;
     }
+
     private String cordsFromCell(int noseCords) {
         int cords = 0;
         for (int i = 0; i < this.field.getField().length; i++)
@@ -43,6 +46,7 @@ public class NPC extends Player implements IGame {
                 }
         return "u100t";
     }
+
     @Override
     public void setDots(Ship ship) {
         this.field.setLabels(ship, ".");
@@ -56,6 +60,7 @@ public class NPC extends Player implements IGame {
             setDots(ship);
         }
     }
+
     private void setHorizontalShip(Ship ship) {
         if (Validations.isShipValid(ship, this.field)) {
             for (int i = 0; i < ship.getRank(); i++) {
@@ -64,6 +69,7 @@ public class NPC extends Player implements IGame {
             setDots(ship);
         }
     }
+
     private void setShip(Ship ship) {
         if (ship.getIsVertical()) {
             setVerticalShip(ship);
@@ -72,6 +78,7 @@ public class NPC extends Player implements IGame {
         }
         listOfShips.add(ship);
     }
+
     private void createShip(int rank, int freeCells) {
         int noseCords = (int) (Math.random() * freeCells);
         String str = cordsFromCell(noseCords);
@@ -79,11 +86,12 @@ public class NPC extends Player implements IGame {
                 Validations.listOfShipsContains(new Ship(rank, str), this.listOfShips) == 1) {
             createShip(rank, freeCells);
         } else {
-            Ship ship = new Ship(rank,str);
+            Ship ship = new Ship(rank, str);
             setShip(ship);
             System.out.println(Arrays.toString(ship.getShipCords().toArray()));
         }
     }
+
     @Override
     public void autoSetListOfShips() {
         int freeCells = field.getFreeCellsForShip();
@@ -107,16 +115,38 @@ public class NPC extends Player implements IGame {
         System.out.println(cord);
         return "";
     }
+
+    private int rankShot(int freeCells) {
+        int cell;
+        String str;
+        int[] cords;
+        if (Math.random() > this.rank)
+            do {
+                cell = (int) (Math.random() * freeCells + 1);
+                str = cordsFromCellFight(cell).substring(0, cordsFromCellFight(cell).length() - 1);
+                cords = new int[]{(int) str.charAt(0) - 97, Integer.parseInt(str.substring(1)) - 1};
+            }
+            while (getFieldOpp().getField()[cords[0]][cords[1]] == '/');
+        else
+            do {
+                cell = (int) (Math.random() * freeCells + 1);
+                str = cordsFromCellFight(cell).substring(0, cordsFromCellFight(cell).length() - 1);
+                cords = new int[]{(int) str.charAt(0) - 97, Integer.parseInt(str.substring(1)) - 1};
+            }
+            while (getFieldOpp().getField()[cords[0]][cords[1]] != '/');
+        return cell;
+    }
+
     @Override
     public String shot() {
         int freeCells = this.getFieldOpp().getFreeCellsForShot();
-        int cell = (int) (Math.random() * freeCells + 1);
-        String str = cordsFromCellFight(cell).substring(0,cordsFromCellFight(cell).length()- 1);
-        int[] cords = new int[] {(int) str.charAt(0) - 97, Integer.parseInt(str.substring(1)) - 1};
+//        int cell = (int) (Math.random() * freeCells + 1);
+        int cell = rankShot(freeCells);
+        String str = cordsFromCellFight(cell).substring(0, cordsFromCellFight(cell).length() - 1);
+        int[] cords = new int[]{(int) str.charAt(0) - 97, Integer.parseInt(str.substring(1)) - 1};
         if ((getFieldOpp().getField()[cords[0]][cords[1]] == '/')) {
-            getFieldOpp().setCell(cords[0], cords[1],"hit");
-        }
-        else getFieldOpp().setCell(cords[0], cords[1],"miss");
+            getFieldOpp().setCell(cords[0], cords[1], "hit");
+        } else getFieldOpp().setCell(cords[0], cords[1], "miss");
         System.out.println("Противник атаковал поле " + str);
         return str;
     }
